@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block head_title %}Profile feeds || {{ block.super }}{% endblock head_title %}
+
+{% block content %}
+
+    {% for profile in following_users %}
+        {% if profile.user.restaurantlocation_set|items_is_public %}
+            <h1 class="text-center"><a
+                    href="{% url "profiles:detail" profile.user.username %}">{{ profile.user.username|title }}</a>
+            </h1>
+            <hr>
+            {% for rest in profile.user.restaurantlocation_set|items_is_public %}
+                {% if rest.item_set|is_public_exists %}
+                    <div class="card" style="margin-bottom: 15px;">
+                        <div class="card-header">
+                            <h3><b>{{ rest.title }}</b> |
+                                <small><a class="text-secondary"
+                                          href="{% url "profiles:detail" profile.user.username %}?q={{ rest.category }}">{{ rest.category }}</a>
+                                </small>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                        {% if rest.item_set|is_public %}
+                            <span><b>Menu Items:</b></span>
+                            <ul>
+                                {% for item in rest.item_set|is_public %}
+                                    <li>{{ item.name }}</li>
+                                    {% for ing in item.get_contents %}
+                                        <a class="badge badge-secondary"
+                                           href="{% url "profiles:detail" profile.user.username %}?q={{ ing }}">{{ ing }}</a>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="card" style="position: absolute; right: 5px; top: 100px;">
+        <div class="card-header text-center">
+            Profiles
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for profile in following_users %}
+
+                <li class="list-group-item"><a
+                        href="{% url "profiles:detail" profile.user.username %}">
+                    {{ profile.user.username|title }}</a></li>
+            {% endfor %}
+
+        </ul>
+    </div>
+
+    {#{% for menu in object_list %}#}
+    {#  <h3><a href="{{ menu.get_absolute_url }}"><b>{{ menu.name }}</b></a></h3>#}
+    {#  {% if menu.contents %}#}
+    {#    <span><b>Contents:</b></span>#}
+    {#    <ul>#}
+    {#      {% for item in menu.get_contents %}#}
+    {#        <li>{{ item }}</li>#}
+    {#      {% endfor %}#}
+    {#    </ul>#}
+    {#  {% endif %}#}
+    {##}
+    {#  {% if menu.excludes %}#}
+    {#    <span><b>Excludes:</b></span>#}
+    {#    <ul>#}
+    {#      {% for item in menu.get_excludes %}#}
+    {#        <li>{{ item }}</li>#}
+    {#      {% endfor %}#}
+    {#    </ul>#}
+    {#  {% endif %}#}
+    {#{% endfor %}#}
+
+{% endblock content %}

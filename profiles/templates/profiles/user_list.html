@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head_title %}Profiles || {{ block.super }}{% endblock head_title %}
+
+{% block content %}
+
+    <form role="search" class="form" method="GET" action="">
+        <div class="input-group">
+            <input class="form-control"
+                   type="search"
+                   name="q"
+                   placeholder="Search..."
+                   autofocus="autofocus"
+                   onfocus="var temp_value=this.value; this.value=''; this.value=temp_value"
+                   value="{{ request.GET.q }}">
+            <div class="input-group-append">
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        {% for profile in object_list %}
+            <div class="{% if object_list|length < 5 %}col-md-12{% endif %} col-md-6">
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <h1 class="text-center"><a
+                                href="{% url "profiles:detail" profile.user.username %}">
+                            {{ profile }}</a></h1>
+                    </div>
+                    <div class="row card-body">
+                        <div class="col-sm-4 text-center"><b>Restaurants:</b>
+                            {{ profile.user.restaurantlocation_set.all.count }}</div>
+                        <div class="col-sm-4 text-center"><b>Meals:</b>
+                            {{ profile.user.item_set.all.count }}</div>
+                        <div class="col-sm-4 text-center">
+                            <b>Followers:</b> {{ profile.followers.count }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

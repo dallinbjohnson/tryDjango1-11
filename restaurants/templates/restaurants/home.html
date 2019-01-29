@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head_title %}Home || {{ block.super }}{% endblock head_title %}
+
+{% block content %}
+
+  <h1>Home page</h1>
+
+  <p>This is your number: {{ num }}</p>
+
+  {% for some_item in some_list %}
+    <p>{{ some_item }}</p>
+  {% endfor %}
+
+{% endblock content %}

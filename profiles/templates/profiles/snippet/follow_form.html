@@ -1,0 +1,26 @@
+{% if request.user.is_authenticated and user != request.user %}
+    <form class="form" method="POST" action="{% url "follow" %}">
+        {% csrf_token %}
+        <input type="hidden"
+               name="username"
+               value="
+                    {% if username %}
+                        {{ username }}
+                    {% else %}
+                        admin
+                    {% endif %}
+                "/>
+        <button class="
+            {% if is_following %}
+                btn btn-secondary
+            {% else %}
+                btn btn-primary
+            {% endif %}">
+            {% if is_following %}
+                Unfollow
+            {% else %}
+                Follow
+            {% endif %}
+        </button>
+    </form>
+{% endif %}
