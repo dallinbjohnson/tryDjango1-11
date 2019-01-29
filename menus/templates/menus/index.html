@@ -4,29 +4,55 @@
 
 {% block content %}
 
-<h1>Menu Items</h1>
+    <div class="row mb-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1 class="text-center">Menu Items</h1>
+        </div>
+        <div class="col-md-4 text-center">
+            <a href="{% url 'menus:create' %}" class="btn btn-secondary">Add Menu Item</a>
+        </div>
+    </div>
 
-<p><a href="{% url 'menus:create' %}">Add Menu Item</a></p>
+    <div class="row">
+        {% for menu in object_list %}
 
-{% for menu in object_list %}
-  <h3><a href="{{ menu.get_absolute_url }}"><b>{{ menu.name }}</b></a></h3>
-  {% if menu.contents %}
-    <span><b>Contents:</b></span>
-    <ul>
-      {% for item in menu.get_contents %}
-        <li>{{ item }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  
-  {% if menu.excludes %}
-    <span><b>Excludes:</b></span>
-    <ul>
-      {% for item in menu.get_excludes %}
-        <li>{{ item }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endfor %}
+            <div class="col-md-6 mb-4">
+                <div class="card" style="height: 100%;">
+                    <div class="card-header">
+                        <h3 class="text-center">
+                            <a href="{{ menu.get_absolute_url }}"><b>{{ menu.name|title }}</b></a>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% if menu.contents %}
+                                <div class="{% if menu.excludes %}col-md-6{% else %}col-md- 12{% endif %}">
+                                    <span><b>Contents:</b></span>
+                                    <ul>
+                                        {% for item in menu.get_contents %}
+                                            <li>{{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+
+                            {% if menu.excludes %}
+                                <div class="{% if menu.contents %}col-md-6{% else %}col-md- 12{% endif %}">
+                                    <span><b>Excludes:</b></span>
+                                    <ul>
+                                        {% for item in menu.get_excludes %}
+                                            <li>{{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
 
 {% endblock content %}
